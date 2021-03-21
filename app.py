@@ -12,8 +12,7 @@ matches = ["Ben", "Jerry", "465"]
 @app.route('/', methods=['GET'])
 def promos():
     sites = {"SuperValu": supervalu(), "Tesco": tesco()}
-
-    s = "<h3>Current Ben and Jerry's Deals.</h3>"
+    s = "<h3>Current Ben and Jerry's Promotions</h3>"
     for site in sites:
         s += site + ":\n"
         s += "<ul>"
