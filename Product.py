@@ -13,8 +13,9 @@ class Product:
                f"\t{self.link}\n"
 
     def get_html(self):
-        return f"<a href={self.link}><button type='button' class='block'>" \
+        return "<style> .button {width: 100%;}</style>" \
+               f"<a href={self.link}><button type='button' class='block'>" \
                f"<li>{self.name}" \
                f"<p>{self.saving}</p>" \
                f"<p>{self.lifetime}</p>" \
-               f"</li></button></a>"
+               "</li></button></a>"
