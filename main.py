@@ -40,19 +40,14 @@ def tesco():
                 name = item.find("h3").text
                 deal_str = " ".join((str(deal.text).replace('\r\n ', '')).split())
                 products.append(Product(name, deal_str, "Tesco"))
+
     return products
 
 
 if __name__ == '__main__':
-    sv = supervalu()
-    tsc = tesco()
+    sites = {"SuperValu": supervalu(), "Tesco": tesco()}
 
-    if sv:
-        print("SuperValu:")
-        for p in sv:
-            print(f"\t{p.name}\n\t{p.deal}\n")
-
-    if tsc:
-        print("Tesco:")
-        for p in tsc:
-            print(f"\t{p.name}\n\t{p.deal}\n")
+    for site in sites:
+        print(site + ":")
+        for item in sites[site]:
+            print(f"*\t{item.name}\n\t{item.deal}\n")
