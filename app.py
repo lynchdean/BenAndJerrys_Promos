@@ -15,7 +15,7 @@ def promos():
     s = "<h3>Current Ben and Jerry's Promotions</h3>"
     for site in sites:
         s += site + ":\n"
-        s += "<ul>"
+        s += "<ul style='list-style-type:none;'>"
         for product in sites[site]:
             s += product.get_html()
         s += "</ul>"
