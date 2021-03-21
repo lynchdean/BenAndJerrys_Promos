@@ -1,9 +1,25 @@
+from flask import Flask
 import requests
 from bs4 import BeautifulSoup
 
 from Product import Product
 
+app = Flask(__name__)
+
 matches = ["Ben", "Jerry", "465"]
+
+@app.route('/', methods=['GET'])
+def promos():
+    sites = {"SuperValu": supervalu(), "Tesco": tesco()}
+
+    s = ''
+    for site in sites:
+        s += site + ":\n"
+        s += "<ul>"
+        for product in sites[site]:
+            s += product.get_html()
+        s += "</ul>"
+    return s
 
 
 def get_soup(url):
@@ -18,11 +34,18 @@ def supervalu():
     search_all = soup.find("div", id="search-all-aisles-listings-view")
     items = search_all.findAll("div", "col-xs-6")
     for item in items:
-        name = str(item.find("h4").text)
+        name = str(item.find("h4").text).strip()
         if all(x in name for x in matches):
-            deal = str(item.find("div", class_="product-details-promotion-name").text)
-            if not deal.isspace():
-                products.append(Product(name.strip(), deal.strip(), "SuperValu"))
+            saving = item.find("div", class_="product-details-promotion-name").text
+            if not saving.isspace():
+                lifetime = " ".join(item.find("div", class_="product-details-promotion-lifetime").text.split())
+                products.append(Product(
+                    name=name,
+                    saving=saving.strip(),
+                    lifetime=lifetime,
+                    link=item.find("a")['href'],
+                    store="SuperValu")
+                )
 
     return products
 
@@ -35,19 +58,21 @@ def tesco():
     items = product_list.findAll("li")
     for item in items:
         if all(x in item.text for x in matches):
-            deal = item.find("div", class_="promo")
-            if deal:
-                name = item.find("h3").text
-                deal_str = " ".join((str(deal.text).replace('\r\n ', '')).split())
-                products.append(Product(name, deal_str, "Tesco"))
+            promo = item.find("div", class_="promo")
+            if promo:
+                heading = item.find("h3")
+                split = " ".join((str(promo.text).replace('\r\n ', '')).split()).split("valid")
+                products.append(Product(
+                    name=heading.text,
+                    saving=split[0],
+                    lifetime="Valid" + split[1],
+                    link="https://www.tesco.ie" + heading.find("a")['href'],
+                    store="Tesco")
+                )
 
     return products
 
 
 if __name__ == '__main__':
-    sites = {"SuperValu": supervalu(), "Tesco": tesco()}
+    app.run(host='0.0.0.0')
 
-    for site in sites:
-        print(site + ":")
-        for item in sites[site]:
-            print(f"*\t{item.name}\n\t{item.deal}\n")

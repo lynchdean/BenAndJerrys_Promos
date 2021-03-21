@@ -1,5 +1,17 @@
 class Product:
-    def __init__(self, name, deal, store):
+    def __init__(self, name, saving, lifetime, link, store):
         self.name = name
-        self.deal = deal
+        self.saving = saving
+        self.lifetime = lifetime
+        self.link = link
         self.store = store
+
+    def __str__(self):
+        return f"*\t{self.name}\n" \
+               f"\t{self.saving}\n" \
+               f"\t{self.lifetime}\n" \
+               f"\t{self.link}\n"
+
+
+    def get_html(self):
+        return f"<li><a href={self.link} class='button'>{self.name}</a></li>"
