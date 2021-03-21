@@ -14,6 +14,7 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # Copy the content of the local src directory to the working directory
+COPY Product.py .
 COPY app.py .
 
 # Specify the command to run on container start
