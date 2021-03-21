@@ -13,10 +13,10 @@ matches = ["Ben", "Jerry", "465"]
 def promos():
     sites = {"SuperValu": supervalu(), "Tesco": tesco()}
     s = '''<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">'''
-    s += "<h3>Current Ben and Jerry's Promotions</h3>"
+    s += "<h3>Ben and Jerry's Promotions</h3>"
     for site in sites:
-        s += site + ":\n"
-        s += "<ul style='list-style-type:none'>"
+        s += f"<h5>{site}:</h5>\n"
+        s += "<ul class='text-center' style='list-style-type:none'>"
         for product in sites[site]:
             s += product.get_html()
         s += "</ul>"
