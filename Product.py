@@ -12,6 +12,5 @@ class Product:
                f"\t{self.lifetime}\n" \
                f"\t{self.link}\n"
 
-
     def get_html(self):
         return f"<li><a href={self.link} class='button'>{self.name}</a></li>"

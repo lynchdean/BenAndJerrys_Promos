@@ -8,11 +8,12 @@ app = Flask(__name__)
 
 matches = ["Ben", "Jerry", "465"]
 
+
 @app.route('/', methods=['GET'])
 def promos():
     sites = {"SuperValu": supervalu(), "Tesco": tesco()}
 
-    s = ''
+    s = "<h3>Current Ben and Jerry's Deals.</h3>"
     for site in sites:
         s += site + ":\n"
         s += "<ul>"
@@ -75,4 +76,3 @@ def tesco():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
-
