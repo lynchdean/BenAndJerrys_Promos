@@ -12,14 +12,17 @@ matches = ["Ben", "Jerry", "465"]
 @app.route('/', methods=['GET'])
 def promos():
     sites = {"SuperValu": supervalu(), "Tesco": tesco()}
-    s = '''<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">'''
-    s += "<h3>Ben and Jerry's Promotions</h3>"
+    s = '''<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">'''
+    s += "<div class='container'><h2>Ben and Jerry's Promotions</h2>" \
+
     for site in sites:
-        s += f"<h5>{site}:</h5>\n"
-        s += "<ul class='text-center' style='list-style-type:none'>"
+        s += f"</br><h2>{site}:</h2>\n"
+        s += "<div class='d-grid gap-2'>"
         for product in sites[site]:
             s += product.get_html()
-        s += "</ul>"
+        s += "</div>"
+
+    s += "</div>"
     return s
 
 
