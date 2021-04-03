@@ -1,6 +1,6 @@
-from flask import Flask
 import requests
 from bs4 import BeautifulSoup
+from flask import Flask
 
 from Product import Product
 
@@ -12,18 +12,34 @@ matches = ["Ben", "Jerry", "465"]
 @app.route('/', methods=['GET'])
 def promos():
     sites = {"SuperValu": supervalu(), "Tesco": tesco()}
-    s = '''<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">'''
-    s += "<div class='container-fluid'><h2>Ben and Jerry's Promotions</h2>" \
-
+    first = True
+    titles = []
+    content = []
     for site in sites:
-        s += f"</br><h2>{site}:</h2>\n"
-        s += "<div class='d-grid gap-2'>"
-        for product in sites[site]:
-            s += product.get_html()
-        s += "</div>"
+        titles.append(
+            f'<button class="nav-link {"active" if first else ""}" id="nav-{site.lower()}-tab" data-bs-toggle="tab" '
+            f'data-bs-target="#nav-{site.lower()}" type="button" role="tab" aria-controls="nav-{site.lower()}" '
+            f'aria-selected="true"><h1>{site}</h1></button>')
 
-    s += "</div>"
-    return s
+        content.append(f'<div class="tab-pane fade {"show active" if first else ""}" id="nav-{site.lower()}" '
+                       f'role="tabpanel" aria-labelledby="nav-{site.lower()}-tab">')
+        content.append('<div class="d-grid gap-2 my-2">')
+        for product in sites[site]:
+            content.append(product.get_card())
+        content.append('</div>')
+        content.append('</div>')
+        first = False
+    return build_page(titles, content)
+
+
+def build_page(titles, content):
+    bootstrap = '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">' \
+                '<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>'
+    title = '<div class="container-fluid"><div class="text-center"><h1 class="display-2">Ben and Jerry\'s Promotions</h1></div>'
+    tabs = f'<nav><div class="nav nav-pills" id="nav-tab" role="tablist">{"".join(titles)}</div>'
+    content = f'<div class="tab-content" id="nav-tabContent">{"".join(content)}</div>'
+
+    return bootstrap + title + tabs + content
 
 
 def get_soup(url):
