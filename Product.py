@@ -32,4 +32,4 @@ class Product:
                f'           </div>' \
                f'       </div>' \
                f'   </div>' \
-               f'</a>' \
+               f'</a>'
